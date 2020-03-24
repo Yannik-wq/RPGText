@@ -1,0 +1,20 @@
+def CaptRect(pos, dimension, Text):
+    import pygame
+    pygame.init()
+    pygame.font.init()
+    pygame.display.init()
+    screen = pygame.display.set_mode(size = (1300,1000))
+    Str = str(Text)
+    f = pygame.font.Font(None, 50)
+    Name = str(Text + 'Rect')
+    #print(Name)
+    Name = pygame.Rect(pos, dimension)
+    #print(pos, dimension)
+    Color = pygame.Color(150, 50, 100, 255)
+    #print(color)
+    ButDraw = pygame.draw.rect(screen, Color, Name)
+
+    Caption = f.render(Str, True, (255,255,100))                              
+    screen.blit(Caption, Name, area=None, special_flags=0)
+    pygame.display.update(Name)
+    return(Name)
