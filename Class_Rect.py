@@ -1,4 +1,4 @@
-import pygame
+import pygame,ptext
 
 class Rectangle:
     def __init__(self, screen, pos, dimension):
@@ -35,3 +35,17 @@ class TextBox(Rectangle):
         self.screen.blit(caption, self.rect, area=None, special_flags=0)
         pygame.display.update(self.rect)
         return(self.rect)
+
+    def draw_multi_line(self,text):
+        ptext.draw(text,self.position )
+        pygame.display.flip()
+
+
+    def check_press(self,event):
+        #pygame.event.get()
+        #if event.type == pygame.MOUSEBUTTONDOWN:
+        return(Rectangle.give_rect(self).collidepoint(pygame.mouse.get_pos()))
+
+
+#class Dialogue(TextBox):
+#    def
