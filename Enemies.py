@@ -85,6 +85,13 @@ class Enemy:
             self.currentevade -= value
         return(self.currentevade)
 
+    def upd_health(self,value,type):
+        if type == '+':
+            self.currenthealth += value
+        else:
+            self.currenthealth -= value
+        return(self.currenthealth)
+
 
 
     def choose_att(self):
