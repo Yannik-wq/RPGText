@@ -1,4 +1,4 @@
-import pygame, Class_Rect, OpenStartScreen, InfoFighter
+import pygame, Class_Rect, OpenStartScreen, InfoClass
 
 
 
@@ -39,24 +39,33 @@ def choose_class(screen):
     while a == 0:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if fighter_rect.collidepoint(pygame.mouse.get_pos()):
-                    a = 0
+        #event.type == pygame.MOUSEBUTTONDOWN:
+                if fighter.check_press(event) == True:
+                    a = 1
                     fighter.delete()
                     rogue.delete()
                     mage.delete()
-                    InfoFighter.info_fighter(screen,exit,zur)
-                elif rogue_rect.collidepoint(pygame.mouse.get_pos()):
-                    a = 0
-                    #InfoRogue()
-                elif mage_rect.collidepoint(pygame.mouse.get_pos()):
-                    a = 0
+                    InfoClass.info_classes(screen, exit, zur,a)
+                elif rogue.check_press(event) == True:
+                    a = 2
+                    fighter.delete()
+                    rogue.delete()
+                    mage.delete()
+                    InfoClass.info_classes(screen, exit, zur,a)
+                elif mage.check_press(event) == True:
+                    a = 3
+                    fighter.delete()
+                    rogue.delete()
+                    mage.delete()
+                    InfoClass.info_classes(screen, exit, zur,a)
+
                     #InfoMage()
-                elif exit_rect.collidepoint(pygame.mouse.get_pos()):
-                    a = 1
+                elif exit.check_press(event) == True:
+                    a = 4
                     pygame.display.quit()
-                elif zur_rect.collidepoint(pygame.mouse.get_pos()):
+                elif zur.check_press(event):
                     #pygame.display.flip()
-                    a = 1
+                    a = 4
                     zur.delete()
                     fighter.delete()
                     rogue.delete()
