@@ -1,14 +1,16 @@
-import pygame, ChooseClassScreen, Class_Rect
+import pygame, ChooseClassScreen, Class_Rect, sys
 
 def info_classes(screen,exit,zur,id):
+
     confirm = Class_Rect.TextBox(screen,(500,600),(150,50),50,'Confirm')
     confirm.draw_button()
+
+
     if id == 1:
-        fighter = Class_Rect.TextBox(screen,(50,80),(800,400),50,'   Fighter Overview')
-        fighter_rect = fighter.give_rect()
+        info = Class_Rect.TextBox(screen,(50,80),(800,400),50,'   Fighter Overview')
         exit.draw_button()
         zur.draw_button()
-        fighter.draw_button()
+        info.draw_button()
         text = """
 
 
@@ -25,76 +27,44 @@ def info_classes(screen,exit,zur,id):
         using stealth,trapping or deceiving doesn't fit most fighters code of honor, which is why they
         aren't very adept at it when they do try.
 
-        In Combat the fighter focuses on direct physical damage and stunning, disarming or out-maneuvering his
-        enemy to get an advantage. His armor prevents him from a decent amount of most damage
-        sources. Only magical damage is a real threat to him as well as being vastly outnummbered"""
+        In Combat the fighter focuses on direct physical damage and stunning, disarming or
+        out-maneuvering his enemy to get an advantage. His armor prevents him from a decent amount
+        of most damage sources. Only magical damage is a real threat to him as well as being vastly
+        outnummbered"""
 
-        fighter.draw_multi_line(text)
-
-        a = 0
-        pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
-        while a == 0:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if exit.check_press(event):
-                        a = 1
-                        pygame.display.quit()
-                    elif zur.check_press(event):
-                        fighter.delete()
-                        confirm.delete()
-                        a = 1
-                        ChooseClassScreen.choose_class(screen)
-                    elif confirm.check_press(event):
-                    #set_class_fighter()
-                        a=1
-                        pygame.display.quit()
+        info.draw_multi_line(text)
 
     elif id == 2:
-        rogue = Class_Rect.TextBox(screen,(50,50),(300,300),50,'Rogue')
-        rogue_rect = rogue.give_rect()
+        info = Class_Rect.TextBox(screen,(50,50),(300,300),50,'Rogue')
         exit.draw_button()
         zur.draw_button()
-        rogue.draw_button()
+        info.draw_button()
 
-        a = 0
-        pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
-        while a == 0:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if exit.give_rect().collidepoint(pygame.mouse.get_pos()):
-                        a = 1
-                        pygame.display.quit()
-                    elif zur.check_press(event):
-                        rogue.delete()
-                        confirm.delete()
-                        a = 1
-                        ChooseClassScreen.choose_class(screen)
-                    elif confirm.check_press(event):
-                        #set_class_fighter()
-                        a=1
-                        pygame.display.quit()
 
     elif id == 3:
-        mage = Class_Rect.TextBox(screen,(50,50),(300,300),50,'Mage')
-        mage_rect = mage.give_rect()
+        info = Class_Rect.TextBox(screen,(50,50),(300,300),50,'Mage')
         exit.draw_button()
         zur.draw_button()
-        mage.draw_button()
+        info.draw_button()
 
-        a = 0
-        pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
-        while a == 0:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if exit.check_press(event):
-                        a = 1
-                        pygame.display.quit()
-                    elif zur.check_press(event):
-                        mage.delete()
-                        confirm.delete()
-                        a = 1
-                        ChooseClassScreen.choose_class(screen)
-                    elif confirm.check_press(event):
+
+
+    a = 0
+    pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
+    while a == 0:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if exit.check_press(event):
+                    a = 1
+                    pygame.display.quit()
+                    sys.exit(0)
+                elif zur.check_press(event):
+                    confirm.delete()
+                    info.delete()
+                    a = 1
+                    ChooseClassScreen.choose_class(screen)
+                elif confirm.check_press(event):
                         #set_class_fighter()
-                        a=1
-                        pygame.display.quit()
+                    a = 1
+                    pygame.display.quit()
+                    sys.exit(0)

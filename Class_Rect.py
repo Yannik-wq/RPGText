@@ -15,11 +15,17 @@ class Rectangle:
         pygame.draw.rect(self.screen, draw_color, self.rect)
         pygame.display.update(self.rect)
 
+    def __del__(self):
+        pass
+
     def delete(self):
         delcolor = pygame.Color(0,0,0,255)
         pygame.draw.rect(self.screen, delcolor, self.rect)
         pygame.display.update(self.rect)
-        return(self.rect)
+        del self
+
+
+
 
 class TextBox(Rectangle):
     def __init__(self, screen, pos, dimension,fontsize,text):

@@ -8,3 +8,4 @@ pygame.display.set_caption('Rats Everywhere')
 pygame.font.init()
 
 OpenStartScreen.open_start_screen()
+print('Jo')
