@@ -1,4 +1,4 @@
-import random
+import numpy
 
 
 class Enemy:
@@ -30,87 +30,89 @@ class Enemy:
         self.a3_per = a3_per
         self.att4  =  att4
         self.a4_per = a4_per
-
     #def attributes(self):
       #print(self.vitality,self.starthealth)
 
-    def get_ini(self):
+    def upd_stat(self, attribute, value):
+        if attribute == dex:
+            self.currentdex += value
+        elif attribute == stre:
+            self.currentstr += value
+        elif attribute == inte:
+            self.currentint += value
+        elif attribute == res:
+            self.currentres += value
+        elif attribute == arc_res:
+            self.currentarc_res += value
+        elif attribute == hp:
+            self.currenthealth += value
+        elif attribute == wpndmg:
+            self.currentwpndmg += value
+
+
+#    def __getattribute__(self, name):
+#        pass
+
+
+    def initiative(self):
         return(self.dexterity/10)
 
 
-
-    def losehealth(self, value):
-        self.currenthealth -= value
-        return(self.currenthealth)
-
-
-
-    def gainhealth(self, wert):
-        self.currenthealth += value
-        return (self.currenthealth)
-
-
-
-    def upd_str(self,value,type):
-        if type == '+':
-            self.currentstr += value
-        else:
-            self.currentstr -= value
-        return(self.currentstr)
-
-
-
-    def upd_dex(self,value,type):
-        if type == '+':
-            self.currentdex += value
-        else:
-            self.currentdex -= value
-        return(self.currentdex)
-
-
-
-    def upd_int(self,value,type):
-        if type == '+':
-            self.currentint += value
-        else:
-            self.currentint -= value
-        return(self.currentint)
-
-
-
-    def upd_evade(self,value,type):
-        if type == '+':
-            self.currentevade += value
-        else:
-            self.currentevade -= value
-        return(self.currentevade)
-
-    def upd_health(self,value,type):
-        if type == '+':
-            self.currenthealth += value
-        else:
-            self.currenthealth -= value
-        return(self.currenthealth)
-
-
-
     def choose_att(self):
-        move = "none"
-        while move == "none":
-            rand = random.randint(1,100)
-            if rand <= self.a1_per:
-                move = self.att1
-            elif rand > self.a1_per and rand <= self.a1_per + self.a2_per:
-                move = self. att2
-            elif rand > self.a1_per + self.a2_per and rand <= self.a1_per + self.a2_per + self.a3_per:
-                move = self. att3
-            elif rand > self.a1_per + self.a2_per + self.a3_per and rand <=self.a1_per + self.a2_per + self.a3_per + self.a4_per:
-                move = self. att4
-        return (move, self.currentwpndmg)
+        attack_list = [self.att1, self.att2, self.att3,self.att4]
+
+        return(numpy.random.choice(attack_list,size=None,replace=True, p=[self.a1_per,self.a2_per,self.a3_per,self.a4_per]), self.currentwpndmg)
+
+
+
+mutant_rat =      Enemy(20,25,40,5,15,10,5,30, "bite", 0.8, "hit_run", 0.2, "none", 0, "none", 0)
+red_glowing_rat = Enemy(30,30,45,15,15,10,10,40, "bite", 70, "blind",30,"none",0,"none",0)
+swarmofrats =     Enemy(35,40,50,5,15,10,5,30, "fan out",30, "swarm_attack", 70,"none",0,"none",0)
 
 
 
 
-mutant_rat = Enemy(20,25,40,5,15,10,5,30, "bite", 80, "hit_run", 20, "none", 0, "none", 0 )
-red_glowing_rat = Enemy(30,30,45,15,15,10,40, "bite", 70, "blind",30,"none",0,"none",0)
-swarmofrats = Enemy(35,40,50,5,15,10,5,30, "fan out",30, "swarm_attack", 70,"none",0,"none",0 )
+
+
+class MonsterAttack:
+    def __init__(self, enemy):
+        self.weapondmg = enemy.weapondmg
+        self.dmg_mult = 1
+        self.attribute = 0
+        self.buff = None
+    def set_mult(self,value):
+        self.dmg_mult = value
+
+    def atk_result(self):
+        dmg = self.weapondmg*self.dmg_mult*(1+self.attribute/100)
+        return(dmg, self.buff)
+
+    def __del__(self):
+        pass
+
+
+
+
+
+
+class bite(MonsterAttack):
+    def __init__(self, enemy):
+        MonsterAttack.__init__(self,enemy)
+        self.attribute = enemy.strength
+
+
+A = bite(red_glowing_rat)
+
+print(A.atk_result())
+
+
+
+
+def fight(enemy):
+    e_ini = enemy.initiative()
+    #p_ini =PlayerClass.Player.get_ini()
+    #en_ini = Enemies.enemy.get_ini()
+    #pl_ini = classes.Player.get_ini()
+    print(e_ini)
+
+#fight(mutant_rat)
