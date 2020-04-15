@@ -6,6 +6,7 @@ import Enemies
 import Attacks
 import classes
 import Class_Rect
+
 R = Class_Rect
 c = classes
 E = Enemies
@@ -17,9 +18,6 @@ def fight(enemy, player, screen, exit):
     en = E.OpponentActOne(enemy)
     player_health = player.hitpoints
     enemy_health = en.starthealth
-    e_ini = en.initiative()/(en.initiative()+player.base_initiative)
-    p_ini = player.base_initiative/(player.base_initiative+en.initiative())
-    print(e_ini, p_ini)
     text1 = en.name + '     Health: ' +str(enemy_health)
     opp =  R.TextBox(screen,(600,100),(500,50),50,text1)
     text2 = player.class_name + '     Health:' + str(player_health)
@@ -62,7 +60,10 @@ def fight(enemy, player, screen, exit):
                         a = 4
                         attack = a4
 
+                    e_ini = en.initiative()/(en.initiative()+player.base_initiative)
+                    p_ini = player.base_initiative/(player.base_initiative+en.initiative())
                     c = 2
+
                     while player_health >0 and enemy_health >0 and c != 0:
                         d = numpy.random.choice((player, enemy),size=None,replace=False, p=[p_ini, e_ini])
                         if d == player:

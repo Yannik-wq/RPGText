@@ -5,7 +5,11 @@ import OpenStartScreen
 import Start_Game
 import classes
 import Class_Rect
+import Fight
+import Enemies
 
+e=Enemies
+f = Fight
 r = Class_Rect
 c = classes
 sg = Start_Game
@@ -30,3 +34,4 @@ elif id == 3:
     player = c.PlayerCharacter(c.Mage)
 
 sg.start_game(player,screen, exit)
+f.fight(e.RedGlowingRat,player, screen, exit)
