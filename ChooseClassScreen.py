@@ -1,3 +1,4 @@
+
 import pygame
 import sys
 import Class_Rect
@@ -9,6 +10,9 @@ ic = InfoClass
 def choose_class(screen, exit):
 
     fighter =  ct.TextBox(screen,(600,200),(150,50),50,'Fighter')
+
+
+
     fighter.draw_button()
 
     rogue =  ct.TextBox(screen,(400,200),(150,50),50,'Rogue')
@@ -33,6 +37,7 @@ def choose_class(screen, exit):
     while id not in[1,2,3]:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
+
                 if fighter.check_press(event):
                     a = 1
                     delete()

@@ -1,3 +1,4 @@
+
 import pygame
 import ChooseClassScreen
 import Class_Rect
@@ -17,6 +18,7 @@ def info_fighter(screen,exit,zur):
     fighter = cr.TextBox(screen,(50,80),(800,400),50,'   Fighter Overview')
     fighter.draw_button()
     text = """
+
 
 
 
@@ -142,4 +144,3 @@ def info_mage(screen,exit,zur):
                     d = C.choose_class(screen, exit)
                     return(d)
 
-#    return (id)

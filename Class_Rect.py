@@ -46,17 +46,24 @@ class TextBox(Rectangle):
         pygame.display.update(self.rect)
         return(self.rect)
 
+
 #Erstellt ein Textfeld mit multiline text
 # Text muss im Format """ text """ sein
+
     def draw_multi_line(self,text):
         ptext.draw(text,self.position )
         pygame.display.flip()
 
+
 #überprüft ob der Button gedrückt wird
+
+
+
     def check_press(self,event):
         #pygame.event.get()
         #if event.type == pygame.MOUSEBUTTONDOWN:
         return(Rectangle.give_rect(self).collidepoint(pygame.mouse.get_pos()))
+
 
 
 
@@ -71,6 +78,7 @@ def check_button_press(button_list):
                     if button.check_press(event):              #Checks wether position of the mouse when clicked is within the 'Firstrect' rectangle
                         a = 1
                         return(button)
+
 
 
 #class Dialogue(TextBox):
