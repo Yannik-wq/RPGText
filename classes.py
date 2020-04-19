@@ -59,12 +59,16 @@ class Rogue(CharacterClass):
                                 )
 
 
+
+
+
 class PlayerCharacter(Fighter, Rogue, Mage):
     def __init__(self, player_class, skillpoint_allocation=None):
         player_class.__init__(self)
         self.hitpoints = 200 + 5*self.base_vitality
         self.dodge = self.base_dexterity/10 #maybe use logistic function
         self.base_initiative = self.base_dexterity/10
+        self.weapondmg = 15
         #self.physical_armor = np.sum([gear.physical_armor for x in equipment_list])
         #self.physical_defense = self.physical_armor * (1+self.base_resilience/100)
         #self.magic_defense = self.magical_armor * (1+self.base_arcane_resistance/100)
@@ -78,5 +82,49 @@ class PlayerCharacter(Fighter, Rogue, Mage):
         pass
 
 
-jack = PlayerCharacter(Fighter)
-print(jack.hitpoints)
+class Background:
+    def __init__(self):
+        self.martial_arts = 5
+        self.monster_lore = 5
+        self.nature = 5
+        self.magical_creatures = 5
+        self.persuasion =5
+        self.demonology = 5
+        self.deception = 5
+        self.intimidation = 5
+        self.disciplin = 5
+        self.arcane_knowledge = 5
+        self.history = 5
+        self.races_n_cultures = 5
+        self.craftsmanship = 5
+        self.acrobatics = 5
+        self.ettiquette = 5
+        self.social_standing = 0
+        self.languages = 5
+        self.music_n_art = 5
+        self.religion = 5
+        self.reflexes = 5
+        self.construction = 5
+        self.engineering = 5
+        self.perception = 5
+        self.riding = 5
+        self.medicin = 5
+        self.ritualism = 5
+
+
+    def talent_check(self, Character, check):
+        value = getattr(Character, check)
+        return(np.random.choice(('Success', 'Failure'),size=None,replace=True, p=[value/100, (100-value)/100]))
+
+
+class Knight(Background):
+    def __init__ (self):
+        Background.__init__(self)
+        self.riding += 5
+
+Player = Knight()
+print(Player.riding)
+print(Player.talent_check(Player,'riding'))
+
+#jack = PlayerCharacter(Fighter)
+#print(jack.hitpoints)
