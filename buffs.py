@@ -1,9 +1,12 @@
-
+import Enemies
 
 class Buff:
-    def __init__(self, duration, strength, Character, is_active=False, b_or_d='buff'):
+    def __init__(self, duration, strength, Character, b_or_d='buff'):
         self.duration = duration
         self.strength = strength
+        self.applied_on = Character
+        self.is_active = False
+        Character.every_buff_or_debuff.append(self)
 
     def apply_effect(self):
         pass
@@ -13,98 +16,97 @@ class Buff:
 
     def look_if_apply(self):
         if self.b_or_d == 'debuff':
-            if self.name not in Character.active_debuffs:
-                Character.active_debuffs.update({self.name : self})
+            if self.name not in self.applied_on.active_debuffs:
+                self.applied_on.active_debuffs.update({self.name : self})
                 self.apply_effect()
-            elif self.strength > Character.active_debuffs.get(self.name).strength:
-                Character.active_debuffs.get(self.name).reverse_effect()
-                Character.active_debuffs.update({self.name : self})
+            elif self.strength > self.applied_on.active_debuffs.get(self.name).strength:
+                self.applied_on.active_debuffs.get(self.name).reverse_effect()
+                self.applied_on.active_debuffs.update({self.name : self})
                 self.apply_effect()
-            elif self.name not in Character.inactive_debuffs:
-                Character.inactive_debuffs.update({self.name : [self]})
+            elif self.name not in self.applied_on.inactive_debuffs:
+                self.applied_on.inactive_debuffs.update({self.name : [self]})
             else:
-                d_list = Character.inactive_debuffs.get(self.name)
+                d_list = self.applied_on.inactive_debuffs.get(self.name)
                 d_list.append(self)
                 d_list.sort(key=lambda x: x.strength, reverse=True)
-                Character.inactive_debuffs.update({self.name : d_list})
+                self.applied_on.inactive_debuffs.update({self.name : d_list})
         else:
-            if self.name not in Character.active_buffs:
-                Character.active_buffs.update({self.name : self})
+            if self.name not in self.applied_on.active_buffs:
+                self.applied_on.active_buffs.update({self.name : self})
                 self.apply_effect()
-            elif self.strength > Character.active_buffs.get(self.name).strength:
-                Character.active_buffs.get(self.name).reverse_effect()
-                Character.active_buffs.update({self.name : self})
+            elif self.strength > self.applied_on.active_buffs.get(self.name).strength:
+                self.applied_on.active_buffs.get(self.name).reverse_effect()
+                self.applied_on.active_buffs.update({self.name : self})
                 self.apply_effect()
-            elif self.name not in Character.inactive_buffs:
-                Character.inactive_buffs.update({self.name : [self]})
+            elif self.name not in self.applied_on.inactive_buffs:
+                self.applied_on.inactive_buffs.update({self.name : [self]})
             else:
-                b_list = Character.inactive_buffs.get(self.name)
+                b_list = self.applied_on.inactive_buffs.get(self.name)
                 b_list.append(self)
                 b_list.sort(key=lambda x: x.strength, reverse=True)
-                Character.inactive_buffs.update({self.name : b_list})
+                self.applied_on.inactive_buffs.update({self.name : b_list})
 
     def check_inactive(self):
         if self.b_or_d == 'buff':
-            if self.name in Character.inactive_buffs.keys():
-                if Character.inactive_buffs.get(self.name) != []:
-                    new_buff = Character.inactive_buffs.get(self.name).pop(0)
+            if self.name in self.applied_on.inactive_buffs.keys():
+                if self.applied_on.inactive_buffs.get(self.name) != []:
+                    new_buff = self.applied_on.inactive_buffs.get(self.name).pop(0)
                     new_buff.apply_effect()
         else:
-            if self.name in Character.inactive_debuffs.keys():
-                if Character.inactive_debuffs.get(self.name) != []:
-                    new_buff = Character.inactive_debuffs.get(self.name).pop(0)
+            if self.name in self.applied_on.inactive_debuffs.keys():
+                if self.applied_on.inactive_debuffs.get(self.name) != []:
+                    new_buff = self.applied_on.inactive_debuffs.get(self.name).pop(0)
                     new_buff.apply_effect()
 
     def remove_self(self):
         if self.b_or_d == 'buff':
             if self.is_active == True:
-                Character.active_buffs.pop(self.name)
+                self.applied_on.active_buffs.pop(self.name)
                 self.check_inactive()
+                self.reverse_effect()
             else:
-                b_list = Character.inactive_buffs.get(self.name)
+                b_list = self.applied_on.inactive_buffs.get(self.name)
                 b_list.remove(self)
-                Character.inactive_buffs.update({self.name : b_list})
+                self.applied_on.inactive_buffs.update({self.name : b_list})
         else:
             if self.is_active == True:
-                Character.active_debuffs.pop(self.name)
+                self.applied_on.active_debuffs.pop(self.name)
                 self.check_inactive()
+                self.reverse_effect()
             else:
-                d_list = Character.inactive_debuffs.get(self.name)
+                d_list = self.applied_on.inactive_debuffs.get(self.name)
                 d_list.remove(self)
-                Character.inactive_debuffs.update({self.name : d_list})
+                self.applied_on.inactive_debuffs.update({self.name : d_list})
+        self.applied_on.every_buff_or_debuff.remove(self)
 
     def turn_goes_by(self):
         if self.duration > 0:
             self.duration -= 1
         else:
-            remove_buff()
+            self.remove_self()
 
 
 class Disarmed(Buff):
     def __init__(self, duration, strength, Character):
         Buff.__init__(self, duration, strength, Character)
         self.name = 'Disarmed'
-        self.description = """ You deal reduced damage """
+        self.description = """ Character deals reduced damage """
         self.b_or_d = 'debuff'
+
 
     def apply_effect(self):
         self.is_active = True
-        Character.dmg_multiplier -= 0.5
+        self.applied_on.weapondmg = (0.5*self.applied_on.weapondmg)
 
     def reverse_effect(self):
         self.is_active = False
-        Character.dmg_multiplier += 0.5
+        self.applied_on.weapondmg = (2*self.applied_on.weapondmg)
 
 
 
-
-some_buff = Disarmed(5, 2, 4)
-print(some_buff.duration)
-another_buff = Disarmed(4, 3, 4)
-buffs = {'Disarmed' : [some_buff, another_buff]}
-buffs.pop('Disarmed')
-print(buffs)
-# print('Disarmed' in buffs)
-# buffs = list(buffs.values())[0]
-# buffs.sort(key=lambda x: x.strength, reverse=True)
-# print(buffs)
+#enemy = Enemies.OpponentActOne(Enemies.RedGlowingRat)
+#print(enemy.weapondmg)
+#some_buff = Disarmed(5, 2, enemy)
+#print(some_buff.description)
+#some_buff.apply_effect()
+#print(enemy.weapondmg)
